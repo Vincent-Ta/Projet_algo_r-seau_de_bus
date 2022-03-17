@@ -28,11 +28,8 @@ we_holidays_path = slited_content[3]
 we_holidays_date_go = dates2dic(slited_content[4])
 we_holidays_date_back = dates2dic(slited_content[5])
 
-print(regular_date_go)
+print(type(regular_date_go["PARC_DES_GLAISINS"][0]))
 
-for i in regular_date_go :
-    print(i)
-    print('\n')
 
-#test git
+
     
