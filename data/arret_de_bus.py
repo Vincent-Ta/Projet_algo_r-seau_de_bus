@@ -1,4 +1,5 @@
 from horaires import *
+from math import inf
 
 class Arret_de_bus:
     '''
@@ -36,7 +37,11 @@ class Arret_de_bus:
         self.horaires_jf.append(horaire_jf) 
 
     def dijkstra(self, liste_arrets, destination):
-       pass 
+        liste_distances=[]
+        
+        for i in range(liste_arrets):
+            liste_distances.append(inf)
+        pass 
 
     def distance_entre_deux_arrets_adjacents_minutes(self, dest):
             dep=changer_string_en_heure(self.horaires[self.arrets_voisins.index(dest)][0])
