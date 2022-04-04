@@ -35,12 +35,58 @@ class Arret_de_bus:
 
     def add_horaire_jf(self, horaire_jf):
         self.horaires_jf.append(horaire_jf) 
+    '''
+    def dijkstra(self, liste_arrets, liste_arrets_a_visiter, dest):
 
-    def dijkstra(self, liste_arrets, destination):
-        liste_distances=[]
+        if liste_arrets==liste_arrets_a_visiter:
+            liste_distances=[inf]*len(liste_arrets)
+            liste_arrets_a_visiter.remove(self)
+            liste_distances[liste_distances.index(self)]=0
         
-        for i in range(liste_arrets):
-            liste_distances.append(inf)
+        else :
+            for i in self.arrets_voisins :
+                if 
+    '''
+    def init_liste_distances(self, liste_tot):
+        liste_dist=[inf]*len(liste_tot)
+
+        for i in range (len(liste_tot)):
+            if liste_tot[i]==self:
+                liste_dist[i]=0
+        return liste_dist
+
+    
+    def maj_a_visiter(self, liste):
+        liste.remove(self)
+
+    
+
+    def mise_a_jour(self, liste_dist, liste_tot):
+        n=0
+        for i in range(len(liste_tot)):
+            if liste_tot[i]==self:
+                n=i
+
+        for i in range(len(self.arrets_voisins)) :
+            for j in range(len(liste_tot)):
+                if  i==j:
+                    if liste_dist[n]+1<liste_dist[j]:
+                        liste_dist[j]=liste_dist[n]+1
+
+    def djikstra(self, dep, dest) :
+        noeud_courant=dep
+        a_visiter= self.liste_arrets([])
+        liste_tot=self.liste_arrets([])
+        liste_dist=self.init_liste_distances(liste_tot)
+        dep.maj_a_visiter(a_visiter)
+        dep.init_liste_distances(liste_tot)
+
+        while noeud_courant!=dest :
+            noeud_courant.mise_a_jour(liste_dist, liste_tot)
+            print(liste_dist)
+            pass
+
+
         pass 
 
     def distance_entre_deux_arrets_adjacents_minutes(self, dest):
@@ -86,4 +132,4 @@ if __name__=="__main__":
     a4.add_horaire(h_mp)
 
 
-    print(a1.distance_entre_deux_arrets_adjacents_minutes(a2))
+    a1.djikstra(a1, a2)
