@@ -16,7 +16,7 @@ class Arret_de_bus:
         self.horaires_jf=[]
 
     def __str__(self):
-        return self.nom
+        return  "arret : " + self.nom
    
     def add_arret(self, new_arret):
         if new_arret not in self.arrets_voisins:
@@ -43,9 +43,10 @@ class Arret_de_bus:
         liste_tot=self.liste_arrets([])
         liste_dist=init_liste_distances(self ,liste_tot)
         liste_chemin=init_chemin(dep, liste_tot)
+        arrets_connus={noeud_courant:[0,[noeud_courant]]}
         print(liste_chemin)
 
-        while a_visiter != [] and noeud_courant != dest:
+        while a_visiter != [] or noeud_courant != dest:
             maj_a_visiter(noeud_courant, a_visiter)
             print("noeud courant : ", noeud_courant.nom)
             mise_a_jour(noeud_courant, liste_dist, liste_tot, liste_chemin, a_visiter)
@@ -57,11 +58,26 @@ class Arret_de_bus:
 
         return liste_dist
 
+
+
+
+
 '''
     def distance_entre_deux_arrets_adjacents_minutes(self, dep,  dest):
             dep=changer_string_en_heure(self.horaires[self.arrets_voisins.index(dest)][0])
             dest=changer_string_en_heure(dest.horaires[dest.arrets_voisins.index(self)][0])
 '''
+
+def init_dico_listes_distances(dep):
+    dict={}
+
+    for i in dep.liste_arrets():
+        i=0
+    pass
+
+
+
+
 
 
 def get_new_noeud_courant(noeud_courant, liste_arrets_a_visiter, liste_distances, liste_tot):
@@ -113,7 +129,52 @@ def mise_a_jour(arret, liste_dist, liste_tot, liste_chemin, a_visiter):
                         if arret.arrets_voisins[i] in a_visiter:
                             indice2=liste_tot.index(arret.arrets_voisins[i])
                             liste_chemin[indice2] = liste_chemin[indice1] + liste_chemin[indice2]
-        
+
+
+#arrets inconnus avec la longueur et l arret precedent
+#arret est inconnu
+def mise_a_jour_2(arret, arrets_connus, arrets_inconnus, liste_tot):
+        #arret est le noeud courant dans la liste des arrets inconnus
+
+        for v in arret.arrets_voisins:
+            if v.nom in arrets_inconnus :
+               d= arrets_inconnus[arret.nom][0] + 1
+               if d<arrets_inconnus[v.nom][0] :
+                   arrets_inconnus[v.nom]=[d,arret.nom]
+        print(arrets_connus["soleil levant"])
+        arrets_connus[arret.nom]=[arrets_inconnus[arret.nom][0], [arrets_connus[arrets_inconnus[arret.nom][1]] + [arret.nom]]]
+  
+        del arrets_inconnus[arret.nom]
+
+
+def dij_dico(dep, dest):
+    noeud_courant=dep
+    liste_tot=dep.liste_arrets([])
+    arrets_connus={noeud_courant.nom:[0,[noeud_courant.nom]]}
+    arrets_inconnus={k.nom:[inf,''] for k in liste_tot if k!=noeud_courant}
+
+
+    for voisin in dep.arrets_voisins:
+        arrets_inconnus[voisin.nom]=[1, dep.nom]
+    while arrets_inconnus !=[] and any(arrets_inconnus[k][0]<inf for k in arrets_inconnus):
+        noeud_courant=get_new_arret_2(arrets_inconnus, liste_tot)
+
+
+        mise_a_jour_2(noeud_courant, arrets_connus, arrets_inconnus, liste_tot)
+
+    return arrets_connus[dest.nom]
+
+
+def get_new_arret_2(arrets_inconnus, liste_tot):
+    if arrets_inconnus != []:
+        nom_arret=min(arrets_inconnus)
+        for i in liste_tot:
+            if i .nom==nom_arret:
+                return i        
+
+    
+    
+    
 
 if __name__=="__main__":
     #test avec 3 arrets        a1 -> a2 -> a3 -> a4
@@ -151,8 +212,6 @@ if __name__=="__main__":
 
     a4.add_horaire(h_ms)
     a4.add_horaire(h_mp)
-
-
-    a1.djikstra(a1, a2)
+    print(dij_dico(a1, a3))
 
     
