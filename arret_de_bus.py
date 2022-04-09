@@ -1,6 +1,7 @@
 from operator import contains
 from horaires import *
 from math import inf
+import operator
 
 class Arret_de_bus:
     '''
@@ -141,7 +142,8 @@ def mise_a_jour_2(arret, arrets_connus, arrets_inconnus, liste_tot):
                d= arrets_inconnus[arret.nom][0] + 1
                if d<arrets_inconnus[v.nom][0] :
                    arrets_inconnus[v.nom]=[d,arret.nom]
-        print(arrets_connus[arrets_inconnus[arret.nom][1]])
+        print(arrets_inconnus)
+        print(arrets_inconnus[arret.nom])
         arrets_connus[arret.nom]=[arrets_inconnus[arret.nom][0], arrets_connus[arrets_inconnus[arret.nom][1]][1] + [arret.nom]]
         del arrets_inconnus[arret.nom]
 
@@ -158,7 +160,6 @@ def dij_dico(dep, dest):
     while arrets_inconnus !=[] and any(arrets_inconnus[k][0]<inf for k in arrets_inconnus):
         noeud_courant=get_new_arret_2(arrets_inconnus, liste_tot)
 
-
         mise_a_jour_2(noeud_courant, arrets_connus, arrets_inconnus, liste_tot)
 
     return arrets_connus[dest.nom]
@@ -166,7 +167,8 @@ def dij_dico(dep, dest):
 
 def get_new_arret_2(arrets_inconnus, liste_tot):
     if arrets_inconnus != []:
-        nom_arret=min(arrets_inconnus)
+        nom_arret=min(arrets_inconnus.items(), key=operator.itemgetter(1))[0]
+        print(arrets_inconnus.items())
         for i in liste_tot:
             if i .nom==nom_arret:
                 return i        
@@ -176,12 +178,12 @@ def get_new_arret_2(arrets_inconnus, liste_tot):
     
 
 if __name__=="__main__":
-    #test avec 3 arrets        a1 -> a2 -> a3 -> a4
+    #test avec 3 arrets        a1 -> a5 -> a2 -> a3 -> a4 -> a1
     a1=Arret_de_bus("soleil levant")
     a2=Arret_de_bus("cimetiere")
     a3=Arret_de_bus("plessis piquet")
     a4=Arret_de_bus("marche")
-
+    a5=Arret_de_bus("theatre")
 
     h_sc=["10:10", "11:11"]
     h_cp=["10:13", "11:14"]
@@ -195,7 +197,8 @@ if __name__=="__main__":
 
 
 
-    a1.add_arret(a2)
+    a1.add_arret(a5)
+    a5.add_arret(a2)
     a2.add_arret(a3)
     a3.add_arret(a4)
     a1.add_arret(a4)
@@ -211,6 +214,11 @@ if __name__=="__main__":
 
     a4.add_horaire(h_ms)
     a4.add_horaire(h_mp)
+
+    a5.add_horaire(h_ms)
+    a5.add_horaire(h_mp)
+
+
     print(dij_dico(a1, a3))
 
     
