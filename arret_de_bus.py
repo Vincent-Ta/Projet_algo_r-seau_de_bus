@@ -141,9 +141,8 @@ def mise_a_jour_2(arret, arrets_connus, arrets_inconnus, liste_tot):
                d= arrets_inconnus[arret.nom][0] + 1
                if d<arrets_inconnus[v.nom][0] :
                    arrets_inconnus[v.nom]=[d,arret.nom]
-        print(arrets_connus["soleil levant"])
-        arrets_connus[arret.nom]=[arrets_inconnus[arret.nom][0], [arrets_connus[arrets_inconnus[arret.nom][1]] + [arret.nom]]]
-  
+        print(arrets_connus[arrets_inconnus[arret.nom][1]])
+        arrets_connus[arret.nom]=[arrets_inconnus[arret.nom][0], arrets_connus[arrets_inconnus[arret.nom][1]][1] + [arret.nom]]
         del arrets_inconnus[arret.nom]
 
 
