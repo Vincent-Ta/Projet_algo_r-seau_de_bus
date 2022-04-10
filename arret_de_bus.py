@@ -73,7 +73,7 @@ def mise_a_jour_2(arret, arrets_connus, arrets_inconnus, liste_tot):
         del arrets_inconnus[arret.nom]
 
 
-def dij_dico(dep, dest):
+def shortest(dep, dest):
     noeud_courant=dep
     liste_tot=dep.liste_arrets([])
     arrets_connus={noeud_courant.nom:[0,[noeud_courant.nom], ["aucune ligne"]]}
@@ -93,7 +93,7 @@ def get_new_arret_2(arrets_inconnus, liste_tot):
             if i.nom==nom_arret:
                 return i        
 
-def affichage_fastest(chemin):
+def affichage_shortest(chemin):
     for i in range(1, len(chemin[1])):
         print("aller à", chemin[1][i], "avec la", chemin[2][i])
 
@@ -139,4 +139,4 @@ if __name__=="__main__":
     a5.add_horaire(h_mp)
 
 
-    affichage_fastest(dij_dico(a1, a3))
+    affichage_shortest(shortest(a1, a3))
