@@ -1,0 +1,7 @@
+import operator
+
+stats={'key1':20, 'key2':35}
+max_key=max(stats.items(), key=operator.itemgetter(1))[0]
+print(max(stats.items(), key=operator.itemgetter(1)))
+
+print(key)
