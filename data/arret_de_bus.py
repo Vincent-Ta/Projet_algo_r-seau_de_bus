@@ -1,7 +1,24 @@
 from operator import contains
-from horaires import *
+#from horaires import *
 from math import inf
 import operator
+
+from data2py import dates2dic
+
+class Reseau_de_bus:
+
+    def __init__(self, nom) :
+        self.nom=nom
+        self.liste_totale_arrets=[]
+    
+    def add_arret(self, arret):
+        if arret not in self.liste_totale_arrets :
+            self.liste_totale_arrets.append(arret)
+
+
+
+    
+
 
 class Arret_de_bus:
     '''
@@ -28,7 +45,7 @@ class Arret_de_bus:
             new_arret.ligne.append(new_ligne)
 
     def liste_arrets(self, liste=[]):
-        if self not in liste:
+        if self not in liste and self.nom!='terminus':
             liste.append(self)
         for i in self.arrets_voisins:
             if i not in liste:
@@ -73,70 +90,130 @@ def mise_a_jour_2(arret, arrets_connus, arrets_inconnus, liste_tot):
         del arrets_inconnus[arret.nom]
 
 
-def dij_dico(dep, dest):
+def shortest(dep, dest):
     noeud_courant=dep
     liste_tot=dep.liste_arrets([])
     arrets_connus={noeud_courant.nom:[0,[noeud_courant.nom], ["aucune ligne"]]}
     arrets_inconnus={k.nom:[inf,'',"aucune ligne"] for k in liste_tot if k!=noeud_courant}
+
     for id_voisin in range(len(dep.arrets_voisins)):
-        arrets_inconnus[dep.arrets_voisins[id_voisin].nom]=[1, dep.nom, dep.ligne[id_voisin]]
+        if dep.arrets_voisins[id_voisin].nom != "terminus":
+            arrets_inconnus[dep.arrets_voisins[id_voisin].nom]=[1, dep.nom, dep.ligne[id_voisin]]
     while arrets_inconnus !=[] and any(arrets_inconnus[k][0]<inf for k in arrets_inconnus):
         noeud_courant=get_new_arret_2(arrets_inconnus, liste_tot)
+    
         mise_a_jour_2(noeud_courant, arrets_connus, arrets_inconnus, liste_tot)
     return arrets_connus[dest.nom]
+
+def meme_nom_dans_la_liste(a, liste):
+    b=False
+    for i in liste :
+        if a.nom==i.nom:
+            b=True
+    return b
+
 
 
 def get_new_arret_2(arrets_inconnus, liste_tot):
     if arrets_inconnus != []:
         nom_arret=min(arrets_inconnus.items(), key=operator.itemgetter(1))[0]
+
+
         for i in liste_tot:
             if i.nom==nom_arret:
                 return i        
-
-def affichage_fastest(chemin):
+            
+def affichage_shortest(chemin):
     for i in range(1, len(chemin[1])):
         print("aller à", chemin[1][i], "avec la", chemin[2][i])
 
+def find_object_and_remove(a, liste):
+    
+    for i in liste :
+        if a.nom==i.nom:
+            result=i
+            liste.remove(i)
+            return result
+
+def creation_arrets(data_file_name, ligne, reseau):
+    try:
+        with open(data_file_name, 'r') as f:
+            content = f.read()
+    except OSError:
+    # 'File not found' error message.
+        print("File not found")
+
+    slited_content = content.split("\n\n")
+    regular_path = slited_content[0]
+    regular_date_go = dates2dic(slited_content[1])
+    regular_date_back = dates2dic(slited_content[2])
+    #we_holidays_path = slited_content[3]
+    we_holidays_date_go = dates2dic(slited_content[4])
+    we_holidays_date_back = dates2dic(slited_content[5])
+    
+    l_arrets=[]
+    terminus=Arret_de_bus("terminus")
+ 
+    
+    for i in range(len(regular_date_go)):
+        if meme_nom_dans_la_liste(Arret_de_bus(list(regular_date_go.keys())[i]),reseau.liste_totale_arrets)==False :
+            l_arrets.append(Arret_de_bus(list(regular_date_go.keys())[i]))
+        else :
+            l_arrets.append(find_object_and_remove(Arret_de_bus(list(regular_date_go.keys())[i]),reseau.liste_totale_arrets))
+    
+    for j in range(len(l_arrets)):
+        
+        for valeur in regular_date_go.values() :
+            l_arrets[j].add_horaire(valeur)
+
+        for valeur in regular_date_back.values() :
+            l_arrets[j].add_horaire(valeur)
+
+        for valeur in we_holidays_date_go.values() :
+            l_arrets[j].add_horaire_jf(valeur)
+
+        for valeur in we_holidays_date_back.values() :
+            l_arrets[j].add_horaire_jf(valeur)
+
+
+
+        if j==0:
+            l_arrets[j].add_arret(terminus, ligne)
+            l_arrets[j].add_arret(l_arrets[j+1], ligne)
+            
+
+        elif j==len(l_arrets)-1:
+            l_arrets[j].add_arret(terminus, ligne)
+
+        else :
+            l_arrets[j].add_arret(l_arrets[j+1], ligne)
+
+    r.liste_totale_arrets+=l_arrets
+ 
+
 if __name__=="__main__":
-    #test avec 3 arrets        a1 -> a5 -> a2 -> a3 -> a4 -> a1
-    a1=Arret_de_bus("soleil levant")
-    a2=Arret_de_bus("cimetiere")
-    a3=Arret_de_bus("plessis piquet")
-    a4=Arret_de_bus("marche")
-    a5=Arret_de_bus("theatre")
+    
+    data_file_name1 = 'data/1_Poisy-ParcDesGlaisins.txt'
+    data_file_name2 = 'data/2_Piscine-Patinoire_Campus.txt'
 
-    h_sc=["10:10", "11:11"]
-    h_cp=["10:13", "11:14"]
-    h_pm=["10:16", "11:17"]
-    h_ms=["10:19", "11:20"]
+    r=Reseau_de_bus("Sibra")
+    creation_arrets('data/1_Poisy-ParcDesGlaisins.txt', 'ligne 1', r)
+    creation_arrets('data/2_Piscine-Patinoire_Campus.txt', 'ligne 2', r)    
 
-    h_pc=["7:16", "13:17"]
-    h_cs=["7:19", "13:20"]
-    h_sm=["7:22", "13:23"]
-    h_mp=["7:25", "13:26"]
+    
+    """
+    for i in r.liste_totale_arrets :
+        print(i.nom)
+        for j in i.arrets_voisins :
+            print("voisin : ", j.nom)
+        print("____________________________________________")
+    """
+   
+    dep=r.liste_totale_arrets[15]
+    dest=r.liste_totale_arrets[8]
+    
+    print("chemin pour aller de ", dep," à ",dest)
+    affichage_shortest(shortest(dep, dest))
+    
 
-
-
-    a1.add_arret(a5, "ligne 189")
-    a5.add_arret(a2, "ligne 189")
-    a2.add_arret(a3, "ligne 189")
-    a3.add_arret(a4, "ligne 189")
-    a1.add_arret(a4, "ligne 189")
-
-    a1.add_horaire(h_sc)
-    a1.add_horaire(h_sm)
-
-    a2.add_horaire(h_cs)
-    a2.add_horaire(h_cp)
-
-    a3.add_horaire(h_pc)
-    a3.add_horaire(h_pm)
-
-    a4.add_horaire(h_ms)
-    a4.add_horaire(h_mp)
-
-    a5.add_horaire(h_ms)
-    a5.add_horaire(h_mp)
-
-
-    affichage_fastest(dij_dico(a1, a3))
+    
