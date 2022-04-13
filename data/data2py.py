@@ -20,19 +20,6 @@ def dates2dic(dates):
         dic[tmp[0]] = tmp[1:]
     return dic
 
-slited_content = content.split("\n\n")
-regular_path = slited_content[0]
-regular_date_go = dates2dic(slited_content[1])
-regular_date_back = dates2dic(slited_content[2])
-we_holidays_path = slited_content[3]
-we_holidays_date_go = dates2dic(slited_content[4])
-we_holidays_date_back = dates2dic(slited_content[5])
-
-print(regular_date_go)
-
-for i in regular_date_go :
-    print(i)
-    print('\n')
 
 #test git
     
