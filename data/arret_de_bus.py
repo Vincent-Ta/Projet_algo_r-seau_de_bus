@@ -1,7 +1,9 @@
 from operator import contains
-from horaires import *
+#from horaires import *
 from math import inf
 import operator
+
+from data2py import dates2dic
 
 class Arret_de_bus:
     '''
@@ -28,7 +30,7 @@ class Arret_de_bus:
             new_arret.ligne.append(new_ligne)
 
     def liste_arrets(self, liste=[]):
-        if self not in liste:
+        if self not in liste and self.nom!='terminus':
             liste.append(self)
         for i in self.arrets_voisins:
             if i not in liste:
@@ -78,10 +80,14 @@ def shortest(dep, dest):
     liste_tot=dep.liste_arrets([])
     arrets_connus={noeud_courant.nom:[0,[noeud_courant.nom], ["aucune ligne"]]}
     arrets_inconnus={k.nom:[inf,'',"aucune ligne"] for k in liste_tot if k!=noeud_courant}
+
     for id_voisin in range(len(dep.arrets_voisins)):
-        arrets_inconnus[dep.arrets_voisins[id_voisin].nom]=[1, dep.nom, dep.ligne[id_voisin]]
+        if dep.arrets_voisins[id_voisin].nom != "terminus":
+            arrets_inconnus[dep.arrets_voisins[id_voisin].nom]=[1, dep.nom, dep.ligne[id_voisin]]
     while arrets_inconnus !=[] and any(arrets_inconnus[k][0]<inf for k in arrets_inconnus):
+        
         noeud_courant=get_new_arret_2(arrets_inconnus, liste_tot)
+    
         mise_a_jour_2(noeud_courant, arrets_connus, arrets_inconnus, liste_tot)
     return arrets_connus[dest.nom]
 
@@ -89,54 +95,65 @@ def shortest(dep, dest):
 def get_new_arret_2(arrets_inconnus, liste_tot):
     if arrets_inconnus != []:
         nom_arret=min(arrets_inconnus.items(), key=operator.itemgetter(1))[0]
+
+
         for i in liste_tot:
             if i.nom==nom_arret:
                 return i        
-
+            
 def affichage_shortest(chemin):
     for i in range(1, len(chemin[1])):
         print("aller à", chemin[1][i], "avec la", chemin[2][i])
 
+def creation_arrets(data_file_name):
+    try:
+        with open(data_file_name, 'r') as f:
+            content = f.read()
+    except OSError:
+    # 'File not found' error message.
+        print("File not found")
+
+    slited_content = content.split("\n\n")
+    regular_path = slited_content[0]
+    regular_date_go = dates2dic(slited_content[1])
+    regular_date_back = dates2dic(slited_content[2])
+    we_holidays_path = slited_content[3]
+    we_holidays_date_go = dates2dic(slited_content[4])
+    we_holidays_date_back = dates2dic(slited_content[5])
+    
+    l_arrets=[]
+    terminus=Arret_de_bus("terminus")
+ 
+
+    for i in range(len(regular_date_go)):
+        l_arrets.append(Arret_de_bus(list(regular_date_go.keys())[i]))
+    
+    for j in range(len(l_arrets)):
+        if j==0 :
+            l_arrets[j].add_arret(terminus, "linge 1")
+            l_arrets[j].add_arret(l_arrets[j+1], "ligne 1")
+        elif j==len(l_arrets)-1:
+            l_arrets[j].add_arret(terminus, "ligne 1")
+        else :
+            l_arrets[j].add_arret(l_arrets[j+1], "ligne 1")
+        
+
+    for valeur in regular_date_back.values() :
+        l_arrets[j].add_horaire(regular_date_back.values())
+
+    for valeur in we_holidays_date_go.values() :
+        l_arrets[j].add_horaire_jf(we_holidays_date_go.values())
+
+    return l_arrets
+
 if __name__=="__main__":
-    #test avec 3 arrets        a1 -> a5 -> a2 -> a3 -> a4 -> a1
-    a1=Arret_de_bus("soleil levant")
-    a2=Arret_de_bus("cimetiere")
-    a3=Arret_de_bus("plessis piquet")
-    a4=Arret_de_bus("marche")
-    a5=Arret_de_bus("theatre")
+    
+    data_file_name = 'data/1_Poisy-ParcDesGlaisins.txt'
+    data_file_name = 'data/2_Piscine-Patinoire_Campus.txt'
+    l_arrets=creation_arrets(data_file_name)
 
-    h_sc=["10:10", "11:11"]
-    h_cp=["10:13", "11:14"]
-    h_pm=["10:16", "11:17"]
-    h_ms=["10:19", "11:20"]
+   
+    affichage_shortest(shortest(l_arrets[0], l_arrets[11]))
+    
 
-    h_pc=["7:16", "13:17"]
-    h_cs=["7:19", "13:20"]
-    h_sm=["7:22", "13:23"]
-    h_mp=["7:25", "13:26"]
-
-
-
-    a1.add_arret(a5, "ligne 189")
-    a5.add_arret(a2, "ligne 189")
-    a2.add_arret(a3, "ligne 189")
-    a3.add_arret(a4, "ligne 189")
-    a1.add_arret(a4, "ligne 189")
-
-    a1.add_horaire(h_sc)
-    a1.add_horaire(h_sm)
-
-    a2.add_horaire(h_cs)
-    a2.add_horaire(h_cp)
-
-    a3.add_horaire(h_pc)
-    a3.add_horaire(h_pm)
-
-    a4.add_horaire(h_ms)
-    a4.add_horaire(h_mp)
-
-    a5.add_horaire(h_ms)
-    a5.add_horaire(h_mp)
-
-
-    affichage_shortest(shortest(a1, a3))
+    
