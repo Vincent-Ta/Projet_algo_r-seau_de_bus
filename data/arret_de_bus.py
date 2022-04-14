@@ -2,7 +2,7 @@ from operator import contains
 #from horaires import *
 from math import inf
 import operator
-
+from fastest import *
 from data2py import dates2dic
 
 class Reseau_de_bus:
@@ -57,11 +57,7 @@ class Arret_de_bus:
 
     def add_horaire_jf(self, horaire_jf):
         self.horaires_jf.append(horaire_jf) 
-'''
-    def distance_entre_deux_arrets_adjacents_minutes(self, dep,  dest):
-            dep=changer_string_en_heure(self.horaires[self.arrets_voisins.index(dest)][0])
-            dest=changer_string_en_heure(dest.horaires[dest.arrets_voisins.index(self)][0])
-'''
+
 #arrets inconnus avec la longueur et l arret precedent
 #arret est inconnu
 def mise_a_jour_2(arret, arrets_connus, arrets_inconnus, liste_tot):
@@ -112,8 +108,6 @@ def meme_nom_dans_la_liste(a, liste):
             b=True
     return b
 
-
-
 def get_new_arret_2(arrets_inconnus, liste_tot):
     if arrets_inconnus != []:
         nom_arret=min(arrets_inconnus.items(), key=operator.itemgetter(1))[0]
@@ -161,19 +155,8 @@ def creation_arrets(data_file_name, ligne, reseau):
         else :
             l_arrets.append(find_object_and_remove(Arret_de_bus(list(regular_date_go.keys())[i]),reseau.liste_totale_arrets))
     
-    for j in range(len(l_arrets)):
-        
-        for valeur in regular_date_go.values() :
-            l_arrets[j].add_horaire(valeur)
+    for j in range(len(l_arrets)): 
 
-        for valeur in regular_date_back.values() :
-            l_arrets[j].add_horaire(valeur)
-
-        for valeur in we_holidays_date_go.values() :
-            l_arrets[j].add_horaire_jf(valeur)
-
-        for valeur in we_holidays_date_back.values() :
-            l_arrets[j].add_horaire_jf(valeur)
 
 
 
@@ -188,6 +171,12 @@ def creation_arrets(data_file_name, ligne, reseau):
         else :
             l_arrets[j].add_arret(l_arrets[j+1], ligne)
 
+    for j in range(len(regular_date_go)):      
+        l_arrets[j].add_horaire(list(regular_date_go.values())[j])
+        l_arrets[j].add_horaire(list(regular_date_back.values())[j])
+        l_arrets[j].add_horaire_jf(list(we_holidays_date_go.values())[j])
+        l_arrets[j].add_horaire_jf(list(we_holidays_date_back.values())[j])
+
     r.liste_totale_arrets+=l_arrets
  
 
@@ -200,20 +189,24 @@ if __name__=="__main__":
     creation_arrets('data/1_Poisy-ParcDesGlaisins.txt', 'ligne 1', r)
     creation_arrets('data/2_Piscine-Patinoire_Campus.txt', 'ligne 2', r)    
 
-    
+
     """
+    print(r.liste_totale_arrets[1].horaires)
+    print(r.liste_totale_arrets[2].horaires)
+    
+    
     for i in r.liste_totale_arrets :
         print(i.nom)
         for j in i.arrets_voisins :
             print("voisin : ", j.nom)
         print("____________________________________________")
     """
-   
-    dep=r.liste_totale_arrets[5]
-    dest=r.liste_totale_arrets[16]
+
+    dep=r.liste_totale_arrets[2]
+    dest=r.liste_totale_arrets[15]
     
-    print("chemin pour aller de ", dep," à ",dest)
-    affichage_shortest(shortest(dep, dest))
-    
+    print("chemin pour aller de", dep.nom,"à",dest.nom)
+    affichage_fastest(fastest(dep, dest))
+    #print("distance entre ", dep.nom, " et ", dest.nom," : ", distance_en_min_entre_deux_arrets(dep,dest))
 
     
