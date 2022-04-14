@@ -209,8 +209,8 @@ if __name__=="__main__":
         print("____________________________________________")
     """
    
-    dep=r.liste_totale_arrets[14]
-    dest=r.liste_totale_arrets[8]
+    dep=r.liste_totale_arrets[5]
+    dest=r.liste_totale_arrets[16]
     
     print("chemin pour aller de ", dep," à ",dest)
     affichage_shortest(shortest(dep, dest))
