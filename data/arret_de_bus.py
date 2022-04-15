@@ -3,6 +3,7 @@ from operator import contains
 from math import inf
 import operator
 from fastest import *
+from foremost import *
 from data2py import dates2dic
 
 class Reseau_de_bus:
@@ -190,11 +191,12 @@ if __name__=="__main__":
     creation_arrets('data/2_Piscine-Patinoire_Campus.txt', 'ligne 2', r)    
 
 
-    """
-    print(r.liste_totale_arrets[1].horaires)
+    print(r.liste_totale_arrets[2].nom)
     print(r.liste_totale_arrets[2].horaires)
+    print(r.liste_totale_arrets[3].nom)
+    print(r.liste_totale_arrets[3].horaires)
     
-    
+    """
     for i in r.liste_totale_arrets :
         print(i.nom)
         for j in i.arrets_voisins :
@@ -206,7 +208,7 @@ if __name__=="__main__":
     dest=r.liste_totale_arrets[15]
     
     print("chemin pour aller de", dep.nom,"à",dest.nom)
-    affichage_fastest(fastest(dep, dest))
+    affichage_foremost(foremost(dep, dest, '10:46'))
     #print("distance entre ", dep.nom, " et ", dest.nom," : ", distance_en_min_entre_deux_arrets(dep,dest))
 
     

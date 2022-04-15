@@ -6,7 +6,7 @@ def changer_string_en_min(heure_en_string):
         return int(heure_en_string[0])*60+int(heure_en_string[2])*10+int(heure_en_string[3])
     elif heure_en_string[2]==':':
         return int(heure_en_string[0])*60*10+int(heure_en_string[1])*60+int(heure_en_string[3])*10+int(heure_en_string[4])
-    else : return -1
+    else : return 0
 
 
 
@@ -24,6 +24,30 @@ def horaire_depart(dep, dest):
         if dep.arrets_voisins[i]==dest:
             indice_h=i
     return indice_h
+
+
+def heure_d_arrivee(arret, arret_suivant, h_depart):
+    for i in range(len(arret_suivant.arrets_voisins)):
+        if arret_suivant.arrets_voisins[i]!=arret and arret_suivant.ligne[i]==arret.ligne[arret.arrets_voisins.index(arret_suivant)]:
+            for j in arret_suivant.horaires[i]:
+                if changer_string_en_min(j)>h_depart:
+                    return j
+ 
+
+
+def temps_d_attente(heure, arret, arret_suivant):
+    if arret_suivant.nom=='terminus':
+        return 0
+    else :
+        for i in range(len(arret.horaires[arret.arrets_voisins.index(arret_suivant)])):
+            if changer_string_en_min(arret.horaires[arret.arrets_voisins.index(arret_suivant)][i])>heure:
+                return changer_string_en_min(arret.horaires[arret.arrets_voisins.index(arret_suivant)][i])-heure
+        for i in range(len(arret.horaires[arret.arrets_voisins.index(arret_suivant)])):
+            if changer_string_en_min(arret.horaires[arret.arrets_voisins.index(arret_suivant)][i])!=0:
+                return 24*60-heure+changer_string_en_min(arret.horaires[arret.arrets_voisins.index(arret_suivant)][i])
+    
+
+
 
 
 def distance_en_min_entre_deux_arrets(dep,dest):
