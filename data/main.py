@@ -1,5 +1,8 @@
 from arret_de_bus import *
-
+from shortest import *
+from arret_de_bus import *
+from fastest import *
+from foremost import *
 
 #On renseigne les noms des fichiers
 data_file_name1 = '1_Poisy-ParcDesGlaisins.txt'
@@ -21,10 +24,9 @@ dest=r.liste_totale_arrets[3]
 affichage_shortest(shortest(r, dep, dest))"""
 
 
-
 """print("chemin pour aller de", dep.nom,"à",dest.nom)
 affichage_fastest(fastest(r, dep, dest))"""
 
 
-"""print("chemin pour aller de", dep.nom,"à",dest.nom)
-affichage_foremost(foremost(r, dep, dest, '10:44'))"""
+print("chemin pour aller de", dep.nom,"à",dest.nom)
+affichage_foremost(foremost(r, dep, dest, '10:44'))

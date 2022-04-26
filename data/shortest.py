@@ -1,7 +1,6 @@
 from math import inf
 import operator
 
-
 def shortest(reseau, dep, dest):
     """Algorithme qui trouve le chemin le plus court en nombre d'arcs"""
     #On prend l'arret de départ comme noeud courant et on crée la liste totale d'arrets
@@ -22,7 +21,6 @@ def shortest(reseau, dep, dest):
 
     #Tant que l'on a pas visite tous les arrets ou qu'il reste des distances a des arrets infinies (que l'on ne connait pas)
     while arrets_inconnus !=[] and any(arrets_inconnus[k][0]<inf for k in arrets_inconnus):
-        print('arrets connus : ', arrets_connus)
         noeud_courant=get_new_arret_shortest(arrets_inconnus, liste_tot)#On prend le nouveau noeud courant (celui avec la + petite distance dans les arrets inconnus)
         mise_a_jour_shortest(noeud_courant, arrets_connus, arrets_inconnus, liste_tot)#mise a jour des distances 
 

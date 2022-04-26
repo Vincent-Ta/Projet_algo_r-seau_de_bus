@@ -124,7 +124,6 @@ def creation_arrets(data_file_name, ligne, reseau):
 
     #Il suffit ensuite d'ajouter la liste d'arrets de la ligne à la liste totale du réseau
     reseau.liste_totale_arrets+=l_arrets
- 
 
 
     
