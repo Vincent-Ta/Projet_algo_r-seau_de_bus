@@ -3,11 +3,11 @@ import operator
 from math import inf
 
 
-def foremost(dep, dest, heure_depart):
+def foremost(reseau, dep, dest, heure_depart):
     """Cette fois ci on veut le chemin le plus court en partant à une certaine heure"""
     noeud_courant=dep
     heure=changer_string_en_min(heure_depart)
-    liste_tot=dep.liste_arrets([])
+    liste_tot=reseau.liste_totale_arrets
     arrets_connus={noeud_courant.nom:[0,[noeud_courant.nom], ["aucune ligne"]]}
     arrets_inconnus={k.nom:[inf,'',"aucune ligne"] for k in liste_tot if k!=noeud_courant}
 
@@ -24,9 +24,6 @@ def foremost(dep, dest, heure_depart):
         noeud_courant=get_new_arret_foremost(arrets_inconnus, liste_tot)
         mise_a_jour_foremost(noeud_courant, arrets_connus, arrets_inconnus, liste_tot, heure)
 
-
-
-    print(arrets_connus)
     return arrets_connus[dest.nom]
 
 

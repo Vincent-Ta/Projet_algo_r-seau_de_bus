@@ -2,11 +2,11 @@ from math import inf
 import operator
 
 
-def shortest(dep, dest):
+def shortest(reseau, dep, dest):
     """Algorithme qui trouve le chemin le plus court en nombre d'arcs"""
     #On prend l'arret de départ comme noeud courant et on crée la liste totale d'arrets
     noeud_courant=dep
-    liste_tot=dep.liste_arrets([])
+    liste_tot=reseau.liste_totale_arrets
 
     #On initialise les listes des arrets que l'on a visité et ceux que l'ont a pas visité (arrets connus et inconnus)
     #On met la distance de l'arret de départ à l'arret de départ à 0
@@ -23,18 +23,10 @@ def shortest(dep, dest):
     #Tant que l'on a pas visite tous les arrets ou qu'il reste des distances a des arrets infinies (que l'on ne connait pas)
     while arrets_inconnus !=[] and any(arrets_inconnus[k][0]<inf for k in arrets_inconnus):
         noeud_courant=get_new_arret_shortest(arrets_inconnus, liste_tot)#On prend le nouveau noeud courant (celui avec la + petite distance dans les arrets inconnus)
-        mise_a_jour_2(noeud_courant, arrets_connus, arrets_inconnus, liste_tot)#mise a jour des distances 
+        mise_a_jour_shortest(noeud_courant, arrets_connus, arrets_inconnus, liste_tot)#mise a jour des distances 
 
     #print(arrets_connus)
     return arrets_connus[dest.nom]
-
-def meme_nom_dans_la_liste(a, liste):
-    """Fonction qui renvoie vraie si l'arret a le meme nom qu'un arret dans une liste (pas forcement memes voisins/horaires)"""
-    b=False
-    for i in liste :
-        if a.nom==i.nom:
-            b=True
-    return b
 
 def get_new_arret_shortest(arrets_inconnus, liste_tot):
     """Fonction qui permet de choisir le nouveau noeud courant"""
@@ -50,17 +42,11 @@ def affichage_shortest(chemin):
     for i in range(1, len(chemin[1])):
         print("aller à", chemin[1][i], "avec la", chemin[2][i])
 
-def find_object_and_remove(a, liste):
-    """Fonction qui permet de trouver un arret dans une liste et de le supprimer"""
-    for i in liste :
-        if a.nom==i.nom:
-            result=i
-            liste.remove(i)
-            return result
+
 
 #arrets inconnus avec la longueur et l arret precedent
 #arret est inconnu
-def mise_a_jour_2(arret, arrets_connus, arrets_inconnus, liste_tot):
+def mise_a_jour_shortest(arret, arrets_connus, arrets_inconnus, liste_tot):
     """Fonction qui permet de mettre à jour les distances des arrets dans les arrets inconnus"""
     #arret est le noeud courant dans la liste des arrets inconnus
 

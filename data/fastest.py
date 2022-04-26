@@ -4,11 +4,11 @@ import operator
 from math import inf
 
 
-def fastest(dep, dest):
+def fastest(reseau, dep, dest):
     """Algorithme qui calcule le chemin le plus court en prenant en compte le temps de trajet entre deux arrets"""
     """Meme principe que pour le shortest mais la distance entre les arrets n'est plus de 1"""
     noeud_courant=dep
-    liste_tot=dep.liste_arrets([])
+    liste_tot=reseau.liste_totale_arrets
     arrets_connus={noeud_courant.nom:[0,[noeud_courant.nom], ["aucune ligne"]]}
     arrets_inconnus={k.nom:[inf,'',"aucune ligne"] for k in liste_tot if k!=noeud_courant}
 

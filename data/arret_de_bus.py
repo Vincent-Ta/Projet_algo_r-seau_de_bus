@@ -40,15 +40,6 @@ class Arret_de_bus:
             self.ligne.append(new_ligne)
             new_arret.ligne.append(new_ligne)
 
-    def liste_arrets(self, liste=[]):
-        """Cette méthode parcourt tous les arrets voisins de chaque arret et les ajoute à une liste pour former une liste totale des arrets"""
-        if self not in liste and self.nom!='terminus':
-            liste.append(self)
-        for i in self.arrets_voisins:
-            if i not in liste:
-                i.liste_arrets(liste)
-        return liste    
-
     def add_horaire(self, horaire):
         """Cette méthode sert à ajouter une liste d'horaires à un arret, IL FAUT LES METTRE DANS LE MÊME ORDRE QUE LES ARRETS"""
         self.horaires.append(horaire)    
@@ -57,7 +48,21 @@ class Arret_de_bus:
         """Cette méthode sert à ajouter une liste d'horaires de weekend à un arret, IL FAUT LES METTRE DANS LE MÊME ORDRE QUE LES ARRETS"""
         self.horaires_jf.append(horaire_jf) 
 
+def meme_nom_dans_la_liste(a, liste):
+    """Fonction qui renvoie vraie si l'arret a le meme nom qu'un arret dans une liste (pas forcement memes voisins/horaires)"""
+    b=False
+    for i in liste :
+        if a.nom==i.nom:
+            b=True
+    return b
 
+def find_object_and_remove(a, liste):
+    """Fonction qui permet de trouver un arret dans une liste et de le supprimer"""
+    for i in liste :
+        if a.nom==i.nom:
+            result=i
+            liste.remove(i)
+            return result
 
 def creation_arrets(data_file_name, ligne, reseau):
     
@@ -118,36 +123,8 @@ def creation_arrets(data_file_name, ligne, reseau):
         l_arrets[j].add_horaire_jf(list(we_holidays_date_go.values())[j])
 
     #Il suffit ensuite d'ajouter la liste d'arrets de la ligne à la liste totale du réseau
-    r.liste_totale_arrets+=l_arrets
+    reseau.liste_totale_arrets+=l_arrets
  
 
-if __name__=="__main__":
-    #On renseigne les noms des fichiers
-    data_file_name1 = '1_Poisy-ParcDesGlaisins.txt'
-    data_file_name2 = '2_Piscine-Patinoire_Campus.txt'
-
-    #On créé le réseau de bus et on ajoute les arrets
-    r=Reseau_de_bus("Sibra")
-    creation_arrets(data_file_name1, 'ligne 1', r)
-    creation_arrets(data_file_name2, 'ligne 2', r)    
-
-    #On choisit notre arret de départ et notre destination
-    dep=r.liste_totale_arrets[2]
-    dest=r.liste_totale_arrets[3]
-    
-    #On exécute l'algorithme qui nous plaît 
-
-
-    """print("chemin pour aller de", dep.nom,"à",dest.nom)
-    affichage_shortest(shortest(dep, dest))"""
-
-
-
-    """print("chemin pour aller de", dep.nom,"à",dest.nom)
-    affichage_fastest(fastest(dep, dest))"""
-
-
-    print("chemin pour aller de", dep.nom,"à",dest.nom)
-    affichage_foremost(foremost(dep, dest, '10:44'))
 
     
