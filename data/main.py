@@ -17,8 +17,8 @@ dest=r.liste_totale_arrets[3]
 #On exécute l'algorithme qui nous plaît 
 
 
-print("chemin pour aller de", dep.nom,"à",dest.nom)
-affichage_shortest(shortest(r, dep, dest))
+"""print("chemin pour aller de", dep.nom,"à",dest.nom)
+affichage_shortest(shortest(r, dep, dest))"""
 
 
 

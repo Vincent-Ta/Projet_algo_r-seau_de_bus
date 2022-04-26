@@ -27,15 +27,15 @@ def foremost(reseau, dep, dest, heure_depart):
     return arrets_connus[dest.nom]
 
 
-def mise_a_jour_foremost(arret, arrets_connus, arrets_inconnus, liste_tot, heure):
+def mise_a_jour_foremost(arret, arrets_connus, arrets_inconnus, liste_tot, heure_depart):
 
-        for v in arret.arrets_voisins:
-            if v.nom in arrets_inconnus :
+        for arret_suivant in arret.arrets_voisins:
+            if arret_suivant.nom in arrets_inconnus :
                 #Ici aussi, on prend en compte le temps d'attente + la distance entre deux arrets 
-                d= arrets_inconnus[arret.nom][0] +  distance_en_min_entre_deux_arrets(arret, v) + temps_d_attente(heure+arrets_inconnus[arret.nom][0], arret, v)
-                if d<arrets_inconnus[v.nom][0] :
-                    indice_arret_v=arret.arrets_voisins.index(v)
-                    arrets_inconnus[v.nom]=[d,arret.nom, arret.ligne[indice_arret_v]]
+                d= arrets_inconnus[arret.nom][0] +  distance_en_min_entre_deux_arrets(arret, arret_suivant) + temps_d_attente(heure_depart+arrets_inconnus[arret.nom][0], arret, arret_suivant)
+                if d<arrets_inconnus[arret_suivant.nom][0] :
+                    indice_arret_v=arret.arrets_voisins.index(arret_suivant)
+                    arrets_inconnus[arret_suivant.nom]=[d,arret.nom, arret.ligne[indice_arret_v]]
 
         old_arret_nom=arrets_inconnus[arret.nom][1]
 
