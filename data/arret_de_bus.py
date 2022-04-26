@@ -60,16 +60,17 @@ class Arret_de_bus:
 
 
 def creation_arrets(data_file_name, ligne, reseau):
+    
     """Cette fonction permet à partir du nom d'un fichier contenant des horaires et des noms d'arrtes, de construire le réseau de bus"""
     #un fichier = une ligne de bus
     #La partie suivante a été fournie par les professeurs, elle permet d'ouvrir le fichier et de placer son contenu dans des dictionnaires, plus faciles à manipuler
     try:
         with open(data_file_name, 'r') as f:
             content = f.read()
-    except OSError:
-    # 'File not found' error message.
-        print("File not found")
+    except OSError: print("File not found")
 
+    # 'File not found' error message.
+        
     #La création des différents dictionnaires avec les horaires et/ou la liste des arrets pour une ligne
     slited_content = content.split("\n\n")
     regular_path = slited_content[0]
@@ -107,12 +108,14 @@ def creation_arrets(data_file_name, ligne, reseau):
         else :
             l_arrets[j].add_arret(l_arrets[j+1], ligne)
 
+
+
     #Chaque arret ayant 2 voisins, il suffit maintenant d'ajouter pour chaque arrets les horaires des bus pour aller vers chaque voisin
     for j in range(len(regular_date_go)):      
+        l_arrets[j].add_horaire(list(regular_date_back.values())[len(regular_date_go)-1-j])
         l_arrets[j].add_horaire(list(regular_date_go.values())[j])
-        l_arrets[j].add_horaire(list(regular_date_back.values())[j])
+        l_arrets[j].add_horaire_jf(list(we_holidays_date_back.values())[len(regular_date_go)-1-j])
         l_arrets[j].add_horaire_jf(list(we_holidays_date_go.values())[j])
-        l_arrets[j].add_horaire_jf(list(we_holidays_date_back.values())[j])
 
     #Il suffit ensuite d'ajouter la liste d'arrets de la ligne à la liste totale du réseau
     r.liste_totale_arrets+=l_arrets
@@ -120,32 +123,31 @@ def creation_arrets(data_file_name, ligne, reseau):
 
 if __name__=="__main__":
     #On renseigne les noms des fichiers
-    data_file_name1 = 'data/1_Poisy-ParcDesGlaisins.txt'
-    data_file_name2 = 'data/2_Piscine-Patinoire_Campus.txt'
+    data_file_name1 = '1_Poisy-ParcDesGlaisins.txt'
+    data_file_name2 = '2_Piscine-Patinoire_Campus.txt'
 
     #On créé le réseau de bus et on ajoute les arrets
     r=Reseau_de_bus("Sibra")
-    creation_arrets('data/1_Poisy-ParcDesGlaisins.txt', 'ligne 1', r)
-    creation_arrets('data/2_Piscine-Patinoire_Campus.txt', 'ligne 2', r)    
+    creation_arrets(data_file_name1, 'ligne 1', r)
+    creation_arrets(data_file_name2, 'ligne 2', r)    
 
     #On choisit notre arret de départ et notre destination
     dep=r.liste_totale_arrets[2]
-    dest=r.liste_totale_arrets[15]
+    dest=r.liste_totale_arrets[3]
     
     #On exécute l'algorithme qui nous plaît 
 
-    """
-    print("chemin pour aller de", dep.nom,"à",dest.nom)
-    affichage_shortest(shortest(dep, dest, '10:46'))
-    """
 
-    """
-    print("chemin pour aller de", dep.nom,"à",dest.nom)
-    affichage_fastest(fastest(dep, dest, '10:46'))
-    """
+    """print("chemin pour aller de", dep.nom,"à",dest.nom)
+    affichage_shortest(shortest(dep, dest))"""
 
-    """
+
+
+    """print("chemin pour aller de", dep.nom,"à",dest.nom)
+    affichage_fastest(fastest(dep, dest))"""
+
+
     print("chemin pour aller de", dep.nom,"à",dest.nom)
-    affichage_foremost(foremost(dep, dest, '10:46'))
-    """
+    affichage_foremost(foremost(dep, dest, '10:44'))
+
     

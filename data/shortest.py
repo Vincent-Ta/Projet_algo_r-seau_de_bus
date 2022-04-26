@@ -25,6 +25,7 @@ def shortest(dep, dest):
         noeud_courant=get_new_arret_shortest(arrets_inconnus, liste_tot)#On prend le nouveau noeud courant (celui avec la + petite distance dans les arrets inconnus)
         mise_a_jour_2(noeud_courant, arrets_connus, arrets_inconnus, liste_tot)#mise a jour des distances 
 
+    #print(arrets_connus)
     return arrets_connus[dest.nom]
 
 def meme_nom_dans_la_liste(a, liste):

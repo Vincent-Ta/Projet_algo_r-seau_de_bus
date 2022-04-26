@@ -21,6 +21,7 @@ def fastest(dep, dest):
         noeud_courant=get_new_arret_fastest(arrets_inconnus, liste_tot)
         mise_a_jour_fastest(noeud_courant, arrets_connus, arrets_inconnus, liste_tot)
 
+    print(arrets_connus)
     return arrets_connus[dest.nom]
 
 

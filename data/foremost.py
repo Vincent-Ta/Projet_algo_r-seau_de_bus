@@ -3,10 +3,10 @@ import operator
 from math import inf
 
 
-def foremost(dep, dest, heure_de_depart):
+def foremost(dep, dest, heure_depart):
     """Cette fois ci on veut le chemin le plus court en partant à une certaine heure"""
     noeud_courant=dep
-    heure_actuelle=changer_string_en_min(heure_de_depart)
+    heure=changer_string_en_min(heure_depart)
     liste_tot=dep.liste_arrets([])
     arrets_connus={noeud_courant.nom:[0,[noeud_courant.nom], ["aucune ligne"]]}
     arrets_inconnus={k.nom:[inf,'',"aucune ligne"] for k in liste_tot if k!=noeud_courant}
@@ -14,24 +14,28 @@ def foremost(dep, dest, heure_de_depart):
     for id_voisin in range(len(dep.arrets_voisins)):
         if dep.arrets_voisins[id_voisin].nom != "terminus":
             #La distance entre de point de départ et ses voisins est égale à la distance en min entre les deux + le temps d'attente du bus
-            arrets_inconnus[dep.arrets_voisins[id_voisin].nom]=[distance_en_min_entre_deux_arrets(dep, dep.arrets_voisins[id_voisin])+temps_d_attente(heure_actuelle, dep,dep.arrets_voisins[id_voisin]), dep.nom, dep.ligne[id_voisin]]
+            arrets_inconnus[dep.arrets_voisins[id_voisin].nom]=[distance_en_min_entre_deux_arrets(dep, dep.arrets_voisins[id_voisin])+temps_d_attente(heure, dep,dep.arrets_voisins[id_voisin]), dep.nom, dep.ligne[id_voisin]]
+
+            """print (distance_en_min_entre_deux_arrets(dep, dep.arrets_voisins[id_voisin]))
+            print (temps_d_attente(heure_actuelle, dep,dep.arrets_voisins[id_voisin]))
+            print('heure au depart : ', heure_actuelle)"""
 
     while arrets_inconnus !=[] and any(arrets_inconnus[k][0]<inf for k in arrets_inconnus):
         noeud_courant=get_new_arret_foremost(arrets_inconnus, liste_tot)
-        mise_a_jour_foremost(noeud_courant, arrets_connus, arrets_inconnus, liste_tot, heure_actuelle)
-        #l'heure actuelle est l'heure de départ + le temps d'arriver à l'arret suivant avec le temps d'attente
-        heure_actuelle=heure_actuelle+arrets_connus[noeud_courant.nom][0]
+        mise_a_jour_foremost(noeud_courant, arrets_connus, arrets_inconnus, liste_tot, heure)
 
+
+
+    print(arrets_connus)
     return arrets_connus[dest.nom]
 
 
-def mise_a_jour_foremost(arret, arrets_connus, arrets_inconnus, liste_tot, heure_actuelle):
+def mise_a_jour_foremost(arret, arrets_connus, arrets_inconnus, liste_tot, heure):
 
         for v in arret.arrets_voisins:
             if v.nom in arrets_inconnus :
                 #Ici aussi, on prend en compte le temps d'attente + la distance entre deux arrets 
-                d= arrets_inconnus[arret.nom][0] +  distance_en_min_entre_deux_arrets(arret, v) + temps_d_attente(heure_actuelle, arret, v)
-                
+                d= arrets_inconnus[arret.nom][0] +  distance_en_min_entre_deux_arrets(arret, v) + temps_d_attente(heure+arrets_inconnus[arret.nom][0], arret, v)
                 if d<arrets_inconnus[v.nom][0] :
                     indice_arret_v=arret.arrets_voisins.index(v)
                     arrets_inconnus[v.nom]=[d,arret.nom, arret.ligne[indice_arret_v]]
