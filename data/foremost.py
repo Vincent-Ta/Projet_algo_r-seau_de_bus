@@ -16,10 +16,6 @@ def foremost(reseau, dep, dest, heure_depart, jf):
             #La distance entre de point de départ et ses voisins est égale à la distance en min entre les deux + le temps d'attente du bus
             arrets_inconnus[dep.arrets_voisins[id_voisin].nom]=[distance_en_min_entre_deux_arrets(dep, dep.arrets_voisins[id_voisin])+temps_d_attente(heure, dep,dep.arrets_voisins[id_voisin], jf), dep.nom, dep.ligne[id_voisin]]
 
-            """print (distance_en_min_entre_deux_arrets(dep, dep.arrets_voisins[id_voisin]))
-            print (temps_d_attente(heure_actuelle, dep,dep.arrets_voisins[id_voisin]))
-            print('heure au depart : ', heure_actuelle)"""
-
     while arrets_inconnus !=[] and any(arrets_inconnus[k][0]<inf for k in arrets_inconnus):
         noeud_courant=get_new_arret_foremost(arrets_inconnus, liste_tot)
         mise_a_jour_foremost(noeud_courant, arrets_connus, arrets_inconnus, liste_tot, heure, jf)
