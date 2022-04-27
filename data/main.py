@@ -29,13 +29,15 @@ heure=input("Entrez l'heure de départ (exemple 10:44) : ")
 
     
 #On exécute l'algorithme qui nous plaît 
+
+#Shortest
 """print("Chemin pour aller de", dep.nom,"à",dest.nom)
 affichage_shortest(shortest(r, dep, dest))"""
 
-
+#Fastest
 """print("Chemin pour aller de", dep.nom,"à",dest.nom)
 affichage_fastest(fastest(r, dep, dest))"""
 
-
-print("chemin pour aller de", dep.nom,"à",dest.nom)
-affichage_foremost(foremost(r, dep, dest, heure, jf))
+#Foremost
+"""print("chemin pour aller de", dep.nom,"à",dest.nom)
+affichage_foremost(foremost(r, dep, dest, heure, jf))"""
