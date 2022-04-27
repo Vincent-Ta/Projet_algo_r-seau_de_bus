@@ -18,12 +18,9 @@ for i in range(len(r.liste_totale_arrets)) :
     print(i, " : ", r.liste_totale_arrets[i].nom)
 
 #On choisit notre arret de départ et notre destination
-id_dep = input("Entrer le numéro de l'arret de depart : ")
-id_dest = input("Entrer le numéro de l'arret d'arrivee : ")
-jf = input("Est ce un jour férié (True ou False) ? ")
-heure= input("Votre heure de départ ? (exemple : 10h44) ")
-dep=r.liste_totale_arrets[int(id_dep)]
-dest=r.liste_totale_arrets[int(id_dest)]
+
+dep=r.liste_totale_arrets[1]
+dest=r.liste_totale_arrets[2]
 
 
     
