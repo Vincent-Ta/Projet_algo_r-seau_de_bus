@@ -40,25 +40,17 @@ def heure_d_arrivee(arret, arret_suivant, h_depart):
 
 def temps_d_attente(heure, arret, arret_suivant, jf):    
     """calcule le temps d'attente en min pour que le prochain bus arrive"""
+    
     if arret_suivant.nom=='terminus':
         return 0
     else :
-        if jf == False : 
-            for i in range(len(arret.horaires[arret.arrets_voisins.index(arret_suivant)])):
-                if changer_string_en_min(arret.horaires[arret.arrets_voisins.index(arret_suivant)][i])>=heure:
-                    return changer_string_en_min(arret.horaires[arret.arrets_voisins.index(arret_suivant)][i])-heure
-            for i in range(len(arret.horaires[arret.arrets_voisins.index(arret_suivant)])):
-                if changer_string_en_min(arret.horaires[arret.arrets_voisins.index(arret_suivant)][i])!=0:
-                    return 24*60-heure+changer_string_en_min(arret.horaires[arret.arrets_voisins.index(arret_suivant)][i])
-        else :
-            for i in range(len(arret.horaires_jf[arret.arrets_voisins.index(arret_suivant)])):
-                if changer_string_en_min(arret.horaires_jf[arret.arrets_voisins.index(arret_suivant)][i])>=heure:
-                    return changer_string_en_min(arret.horaires_jf[arret.arrets_voisins.index(arret_suivant)][i])-heure
-            for i in range(len(arret.horaires_jf[arret.arrets_voisins.index(arret_suivant)])):
-                if changer_string_en_min(arret.horaires_jf[arret.arrets_voisins.index(arret_suivant)][i])!=0:
-                    return 24*60-heure+changer_string_en_min(arret.horaires_jf[arret.arrets_voisins.index(arret_suivant)][i])
+        for i in range(len(arret.horaires[arret.arrets_voisins.index(arret_suivant)])):
+            if changer_string_en_min(arret.horaires[arret.arrets_voisins.index(arret_suivant)][i])>=heure:
+                return changer_string_en_min(arret.horaires[arret.arrets_voisins.index(arret_suivant)][i])-heure
+        for i in range(len(arret.horaires[arret.arrets_voisins.index(arret_suivant)])):
+            if changer_string_en_min(arret.horaires[arret.arrets_voisins.index(arret_suivant)][i])!=0:
+                return 24*60-heure+changer_string_en_min(arret.horaires[arret.arrets_voisins.index(arret_suivant)][i])
 
-    
 
 
 
