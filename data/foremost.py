@@ -20,6 +20,7 @@ def foremost(reseau, dep, dest, heure_depart, jf):
         noeud_courant=get_new_arret_foremost(arrets_inconnus, liste_tot)
         mise_a_jour_foremost(noeud_courant, arrets_connus, arrets_inconnus, liste_tot, heure, jf)
 
+    print(arrets_connus)
     return arrets_connus[dest.nom]
 
 
