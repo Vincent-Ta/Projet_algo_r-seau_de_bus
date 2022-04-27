@@ -35,5 +35,5 @@ affichage_shortest(shortest(r, dep, dest))"""
 affichage_fastest(fastest(r, dep, dest))"""
 
 
-"""print("Chemin pour aller de", dep.nom,"à",dest.nom)
-affichage_foremost(foremost(r, dep, dest, '10:44', jf))"""
+print("Chemin pour aller de", dep.nom,"à",dest.nom)
+affichage_foremost(foremost(r, dep, dest, '10:44', jf))
