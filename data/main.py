@@ -19,9 +19,13 @@ for i in range(len(r.liste_totale_arrets)) :
 
 #On choisit notre arret de départ et notre destination
 
-dep=r.liste_totale_arrets[1]
-dest=r.liste_totale_arrets[2]
+id_dep=input("Entrez l'id de l'arrêt de départ : ")
+id_dest=input("Entrez l'id de l'arrêt d'arrivée : ")
+jf=input("Est ce un jour férié ? True si oui, False sinon : ")
 
+dep=r.liste_totale_arrets[int(id_dep)]
+dest=r.liste_totale_arrets[int(id_dest)]
+heure=input("Entrez l'heure de départ (exemple 10:44) : ")
 
     
 #On exécute l'algorithme qui nous plaît 
@@ -34,4 +38,4 @@ affichage_fastest(fastest(r, dep, dest))"""
 
 
 print("chemin pour aller de", dep.nom,"à",dest.nom)
-affichage_foremost(foremost(r, dep, dest, '10:44'))
+affichage_foremost(foremost(r, dep, dest, heure, jf))
