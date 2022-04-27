@@ -2,8 +2,8 @@ from arret_de_bus import *
 
 
 #On renseigne les noms des fichiers
-data_file_name1 = '1_Poisy-ParcDesGlaisins.txt'
-data_file_name2 = '2_Piscine-Patinoire_Campus.txt'
+data_file_name1 = 'data/1_Poisy-ParcDesGlaisins.txt'
+data_file_name2 = 'data/2_Piscine-Patinoire_Campus.txt'
 
 #On créé le réseau de bus et on ajoute les arrets
 r=Reseau_de_bus("Sibra")
@@ -26,5 +26,5 @@ affichage_shortest(shortest(r, dep, dest))"""
 affichage_fastest(fastest(r, dep, dest))"""
 
 
-"""print("chemin pour aller de", dep.nom,"à",dest.nom)
-affichage_foremost(foremost(r, dep, dest, '10:44'))"""
+print("chemin pour aller de", dep.nom,"à",dest.nom)
+affichage_foremost(foremost(r, dep, dest, '10:44'))
